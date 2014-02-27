@@ -60,7 +60,7 @@ class Fgac_Application_Acl_Engine {
         $this->setAclAlias($options['acl-alias']);
 
         // loading data from application.ini
-        if (null !== $options['rule'] && !empty($options['rule'])) {
+        if (isset($options['rule'])) {
             foreach($options['rule'] as $rule => $ruleOptions) {
                 $this->getLogger()->log("Rule (config):: \"$rule\"", Zend_Log::DEBUG);
                 $this->addRule($ruleOptions['plugin'], array(
