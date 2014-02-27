@@ -14,7 +14,7 @@ class Fgac_Application_Acl_Resource_Fgac extends Zend_Application_Resource_Resou
         /** @var $logger Zend_Log */
         $logger = Zend_Registry::get('logger')->ensureStream('fgac');
         $options = $this->getOptions();
-        $fgac = Fgac_Application_Acl_DbPlugin::getInstance();
+        $fgac = Fgac_Application_Acl_Engine::getInstance();
         if ("yes" === $options['enabled']) {
             $aclAlias = $options['acl-alias'];
             $fgac->setAclAlias($aclAlias);
