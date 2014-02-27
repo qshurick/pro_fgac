@@ -6,7 +6,7 @@
  * Time: 2:41
  */
 
-class Fgac_Application_Resource_Fgac extends Zend_Application_Resource_ResourceAbstract {
+class Fgac_Application_Resource_Acl_Fgac extends Zend_Application_Resource_ResourceAbstract {
 
     public  function init() {
         $this->getBootstrap()->bootstrap('logger');
