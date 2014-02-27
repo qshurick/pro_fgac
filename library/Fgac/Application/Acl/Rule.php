@@ -30,7 +30,7 @@ class Fgac_Application_Acl_Rule {
     }
 
     public function addTable($table) {
-        if (!in_array($table, $this->_tables))
+        if (null !== $table && !in_array($table, $this->_tables))
             $this->_tables[] = $table;
     }
 
@@ -45,7 +45,7 @@ class Fgac_Application_Acl_Rule {
     }
 
     public function addRole($role) {
-        if (!in_array($role, $this->_roles)) {
+        if (null !== $role && !in_array($role, $this->_roles)) {
             $this->_roles[] = $role;
         }
     }

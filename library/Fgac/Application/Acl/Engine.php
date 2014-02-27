@@ -38,8 +38,8 @@ class Fgac_Application_Acl_Engine {
     }
 
     public function addRule($rule, $options) {
-        $table = $options['table_name'];
-        $roles = $options['code'];
+        $table = $options['tables'];
+        $roles = $options['roles'];
         if (null === $this->_rules[$rule]) {
             $this->_rules[$rule] = new Fgac_Application_Acl_Rule($rule, $table, $roles);
         } else {
@@ -48,6 +48,7 @@ class Fgac_Application_Acl_Engine {
              */
             $ruleObject = $this->_rules[$rule];
             $ruleObject->addRoles($roles);
+            $ruleObject->addTables($table);
         }
         if (null === $this->_tables[$table]) {
             $this->_tables[$table] = array($rule);
@@ -58,7 +59,7 @@ class Fgac_Application_Acl_Engine {
     }
 
     public function hasRule($table, $roles = array()) {
-        if (in_array($table, $this->_tables)) {
+        if (array_key_exists($table, $this->_tables)) {
             if (empty($roles))
                 return true;
             foreach ($this->_tables[$table] as $rule) {
@@ -75,7 +76,7 @@ class Fgac_Application_Acl_Engine {
     }
 
     public function invoke($table, $roles, Pro_Db_Select &$select) {
-        if (in_array($table, $this->_tables)) {
+        if (array_key_exists($table, $this->_tables)) {
             foreach ($this->_tables[$table] as $rule) {
                 /**
                  * @var $ruleObject Fgac_Application_Acl_Rule
