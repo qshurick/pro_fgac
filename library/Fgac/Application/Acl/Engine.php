@@ -12,17 +12,25 @@ class Fgac_Application_Acl_Engine {
     const SESSION_ALIAS = "fgac-acl";
 
     static protected $_instance;
+    static protected $_options;
+    static public function setup($options) {
+        self::$_options = $options;
+    }
     static public function getInstance() {
         if (null === self::$_instance) {
             $session = new Zend_Session_Namespace(self::SESSION_ALIAS);
             if (null !== $session->fgac) {
                 self::$_instance = unserialize($session->fgac);
             } else {
-                self::$_instance = new self();
+                self::$_instance = new self(self::$_options);
                 $session->fgac = serialize(self::$_instance);
             }
         }
         return self::$_instance;
+    }
+
+    protected function __construct($options) {
+        $this->setOptions($options);
     }
 
     protected $_rules = array();
@@ -35,6 +43,44 @@ class Fgac_Application_Acl_Engine {
 
     public function getAclAlias() {
         return $this->_aclAlias;
+    }
+
+    /**
+     * @return Zend_Log
+     */
+    protected function getLogger() {
+        return Zend_Registry::get('logger')->ensureStream('fgac');
+    }
+
+    protected  function setOptions($options) {
+        if ("yes" !== $options['enabled']) return;
+
+        $this->getLogger()->log("FGAC Plugin initialization", Zend_Log::DEBUG);
+
+        $this->setAclAlias($options['acl-alias']);
+
+        // loading data from application.ini
+        if (null !== $options['rule'] && !empty($options['rule'])) {
+            foreach($options['rule'] as $rule => $ruleOptions) {
+                $this->getLogger()->log("Rule (config):: \"$rule\"", Zend_Log::DEBUG);
+                $this->addRule($ruleOptions['plugin'], array(
+                    'tables' => explode(",", $ruleOptions['tables']),
+                    'roles' => explode(",", $ruleOptions['roles']),
+                ));
+            }
+        }
+        // loading data from DB storage
+        $table = new Fgac_Application_Db_FgacAcl();
+        $rules = $table->getFull();
+        if ($rules->count() > 0) {
+            foreach($rules as $rule) {
+                $this->getLogger()->log("Rule (db):: \"" . $rule->name . "\"", Zend_Log::DEBUG);
+                $this->addRule($rule->plugin, array(
+                    'tables' => $rule->table_name,
+                    'roles' => $rule->code,
+                ));
+            }
+        }
     }
 
     public function addRule($rule, $options) {
