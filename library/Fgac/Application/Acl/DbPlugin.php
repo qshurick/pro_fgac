@@ -6,7 +6,7 @@
  * Time: 2:15
  */
 
-class FGAC_Application_Acl_DbPlugin extends Pro_Db_Plugin_PluginAbstract {
+class Fgac_Application_Acl_DbPlugin extends Pro_Db_Plugin_PluginAbstract {
 
     const REGISTRY_ALIAS = "fgac-acl";
     const SESSION_ALIAS = "fgac-acl";

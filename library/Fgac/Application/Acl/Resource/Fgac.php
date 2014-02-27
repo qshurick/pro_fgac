@@ -6,7 +6,7 @@
  * Time: 2:41
  */
 
-class Fgac_Application_Resource_Acl_Fgac extends Zend_Application_Resource_ResourceAbstract {
+class Fgac_Application_Acl_Resource_Fgac extends Zend_Application_Resource_ResourceAbstract {
 
     public  function init() {
         $this->getBootstrap()->bootstrap('logger');
@@ -14,7 +14,7 @@ class Fgac_Application_Resource_Acl_Fgac extends Zend_Application_Resource_Resou
         /** @var $logger Zend_Log */
         $logger = Zend_Registry::get('logger')->ensureStream('fgac');
         $options = $this->getOptions();
-        $fgac = FGAC_Application_Acl_DbPlugin::getInstance();
+        $fgac = Fgac_Application_Acl_DbPlugin::getInstance();
         if ("yes" === $options['enabled']) {
             $aclAlias = $options['acl-alias'];
             $fgac->setAclAlias($aclAlias);
