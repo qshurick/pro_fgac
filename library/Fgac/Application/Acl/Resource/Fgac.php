@@ -21,22 +21,26 @@ class Fgac_Application_Acl_Resource_Fgac extends Zend_Application_Resource_Resou
 
             $logger->log("FGAC Plugin load", Zend_Log::DEBUG);
             // loading data from application.ini
-            foreach($options['rule'] as $rule => $ruleOptions) {
-                $logger->log("Rule (config):: \"$rule\"", Zend_Log::DEBUG);
-                $fgac->addRule($ruleOptions['plugin'], array(
-                    'tables' => explode(",", $ruleOptions['tables']),
-                    'roles' => explode(",", $ruleOptions['roles']),
-                ));
+            if (null !== $options['rule'] && !empty($options['rule'])) {
+                foreach($options['rule'] as $rule => $ruleOptions) {
+                    $logger->log("Rule (config):: \"$rule\"", Zend_Log::DEBUG);
+                    $fgac->addRule($ruleOptions['plugin'], array(
+                        'tables' => explode(",", $ruleOptions['tables']),
+                        'roles' => explode(",", $ruleOptions['roles']),
+                    ));
+                }
             }
             // loading data from DB storage
             $table = new Fgac_Application_Db_FgacAcl();
             $rules = $table->getFull();
-            foreach($rules as $rule) {
-                $logger->log("Rule (db):: \"" . $rule->name . "\"", Zend_Log::DEBUG);
-                $fgac->addRule($rule->plugin, array(
-                    'tables' => $rule->table_name,
-                    'roles' => $rule->code,
-                ));
+            if ($rules->count() > 0) {
+                foreach($rules as $rule) {
+                    $logger->log("Rule (db):: \"" . $rule->name . "\"", Zend_Log::DEBUG);
+                    $fgac->addRule($rule->plugin, array(
+                        'tables' => $rule->table_name,
+                        'roles' => $rule->code,
+                    ));
+                }
             }
         } else {
             $logger->log("FGAC Plugin is not enabled", Zend_Log::INFO);
