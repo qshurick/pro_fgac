@@ -11,8 +11,8 @@ class Fgac_Application_Db_FgacAcl extends Pro_Db_Table {
     public function getFull() {
         $select = $this->select()
             ->setIntegrityCheck(false)
-            ->join(array("fr" => "fgac_rules"), "fr.rule_id = id")
-            ->join(array("acl" => "acl_roles"), "acl.id = fr.role_id");
+            ->join(array("fr" => "fgac_rules"), "fr.id = rule_id")
+            ->join(array("acl" => "acl_roles"), "acl.id = role_id");
         return $this->fetchAll($select);
     }
 }
