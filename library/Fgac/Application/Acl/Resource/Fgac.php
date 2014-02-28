@@ -13,5 +13,6 @@ class Fgac_Application_Acl_Resource_Fgac extends Zend_Application_Resource_Resou
         $this->getBootstrap()->bootstrap('acl');
 
         Fgac_Application_Acl_Engine::setup($this->getOptions());
+        return Fgac_Application_Acl_Engine::getInstance();
     }
 }
