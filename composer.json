@@ -10,7 +10,7 @@
     "require": {
         "qshurick/pro_log": "dev-master",
         "qshurick/pro_core": "dev-master",
-        "zendframework/zendframework1": "1.12.3",
+        "zendframework/zendframework1": "1.12.x",
         "qshurick/pro_acl": "dev-master"
     },
     "autoload": {
